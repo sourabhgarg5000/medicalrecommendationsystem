@@ -89,12 +89,15 @@
         <!-- Display the transcribed text here -->
         <div name="mysysms" id="transcription"></div>
 
-        {% if message %}
-        <p>{{ message }}</p>
-        {% endif %}
+
         <br>
 
         <button type="submit" class="btn btn-danger btn-lg" style="width: 100%; padding: 14px; margin-bottom: 5px;">Predict</button>
+        {% if message %}
+        <div style="color: red;background-color:white; border : 2px solid grey ;border-radius : 10px ;padding:7px 0px 0px 10px;">
+            <p>{{ message }}</p>
+        </div>
+        {% endif %}
     </form>
 </div>
 

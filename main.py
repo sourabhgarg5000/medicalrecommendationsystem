@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify,session
 import numpy as np
 import pandas as pd
 import pickle
@@ -8,6 +8,7 @@ from fuzzywuzzy import process
 # flask app
 app = Flask(__name__)
 
+app.secret_key = 'supersecretkey12345'
 
 
 # load databasedataset===================================
@@ -65,15 +66,16 @@ def index():
 
 # Define a route for the home page
 @app.route('/predict', methods=['GET', 'POST'])
-
-
+@app.route('/predict', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
         symptoms = request.form.get('symptoms').lower()
-        # mysysms = request.form.get('mysysms')
-        # print(mysysms)
 
-        print(symptoms)
+        # If the input is empty
+        if not symptoms:
+            session['message'] = "Please enter symptoms correctly."
+            return render_template('index.html', message=session['message'])
+
         user_symptoms = [s.strip() for s in symptoms.split(',')]
         valid_symptoms = []
         score = 0
@@ -83,36 +85,29 @@ def home():
             if score >= 80:  # Adjust the threshold as needed
                 valid_symptoms.append(best_match)
 
-        if not symptoms:
-            message = "Please enter symptoms."
-            return render_template('index.html', message=message)
+        # If there are no valid symptoms
+        if score < 79:
+            session['message'] = "Please either write symptoms correctly or you have written misspelled symptoms."
+            return render_template('index.html', message=session['message'])
 
-        elif score<79:
-            message = "Please either write symptoms or you have written misspelled symptoms"
-            return render_template('index.html', message=message)
+        # Otherwise, proceed with prediction
+        user_symptoms = [symptom.strip("[]' ") for symptom in valid_symptoms]
+        predicted_disease = get_predicted_value(user_symptoms)
+        dis_des, precautions, medications, rec_diet, workout = helper(predicted_disease)
 
-        else:
+        my_precautions = [i for i in precautions[0]]
 
-            # Split the user's input into a list of symptoms (assuming they are comma-separated)
+        # Clear the message after the next request
+        session.pop('message', None)  # Remove the message after successful processing
 
-            # Remove any extra characters, if any
+        return render_template('index.html', predicted_disease=predicted_disease, dis_des=dis_des,
+                               my_precautions=my_precautions, medications=medications, my_diet=rec_diet,
+                               workout=workout)
 
 
 
-            user_symptoms = [symptom.strip("[]' ") for symptom in valid_symptoms]
-            predicted_disease = get_predicted_value(user_symptoms)
-            dis_des, precautions, medications, rec_diet, workout = helper(predicted_disease)
-
-            my_precautions = []
-            for i in precautions[0]:
-                my_precautions.append(i)
-
-            return render_template('index.html', predicted_disease=predicted_disease, dis_des=dis_des,
-                                   my_precautions=my_precautions, medications=medications, my_diet=rec_diet,
-                                   workout=workout)
 
     return render_template('index.html')
-
 
 
 # about view funtion and path
