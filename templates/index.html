@@ -23,12 +23,19 @@
             border: 2px solid black;
             border-radius: 25px;
         }
+    .btn-light-green {
+        background-color: #8bc34a; /* Light Green */
+        color: white;
+    }
 
+    .btn-light-green:hover {
+        background-color: #7cb342; /* Darker green */
+    }
 
 
 
     </style>
-</head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -68,7 +75,34 @@
         </div>
     </nav>
 
+        <!-- Button to open the modal -->
+        <button type="button" class="btn btn-light-green circle-button float-end" data-bs-toggle="modal" data-bs-target="#symptomModal" style = "color:red; margin:10px;">
+            Show Symptoms with Hindi Meanings
+        </button>
 
+        <!-- Modal -->
+        <div class="modal fade" id="symptomModal" tabindex="-1" aria-labelledby="symptomModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="symptomModalLabel">List of Symptoms with Hindi Meanings</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            {% for symptom, meaning in symptom_hindi.items() %}
+                                <li class="list-group-item">
+                                    <strong>{{ symptom }}</strong> - {{ meaning }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 <!-- main form of page -->
