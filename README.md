@@ -32,5 +32,38 @@ The **Medicine Recommendation System** is an AI-based application designed to re
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/yourusername/medicine-recommendation-system.git
+   
+2. **Navigate to the project folder:**
+   ```bash
+   cd medicine-recommendation-system
+3. **Install dependencies: Make sure you have all required Python packages installed. You can install them using:**
+   ```bash
+   pip install -r requirements.txt
+4. **Run the flask app**
+   ```bash
+   python app.py
+## How to Use
 
- 
+1. Launch the application in your web browser.
+2. On the homepage, you will find an input form where you can enter the symptoms you are experiencing.
+3. After entering the symptoms, click on the **Predict** button.
+4. The system will display a list of recommended medicines based on the symptoms you provided.
+
+## Example Input and Output
+
+### Input:
+Symptoms: **"Fever, Cough, Headache"**
+
+### Output:
+Recommended Medicines:
+- Paracetamol
+- Ibuprofen
+- Cough Syrup
+
+## Future Enhancements
+- **Additional Symptom Analysis:** Improve the symptom-to-medicine mapping by using more advanced algorithms.
+- **Personalization:** Implement a user profile to recommend medicines based on the user's previous history.
+- **Integration with Health APIs:** Integrate with healthcare APIs to provide more accurate and real-time data.
+
+## Contributing
+Feel free to fork this repository, make changes, and submit pull requests. Contributions are welcome!
