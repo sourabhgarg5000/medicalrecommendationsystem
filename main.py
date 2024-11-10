@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify, session
+from flask import Flask, request, render_template, jsonify, session, flash, redirect, url_for
 import numpy as np
 import pandas as pd
 import pickle
@@ -234,7 +234,8 @@ symptom_hindi = {
 
 @app.route("/")
 def index():
-    return render_template("index.html",symptom_hindi=symptom_hindi)
+
+    return render_template("index.html", symptom_hindi=symptom_hindi)
 
 
 # Define a route for the home page
@@ -246,8 +247,8 @@ def home():
 
         # If the input is empty
         if not symptoms:
-            session['message'] = "Please enter symptoms correctly."
-            return render_template('index.html', message=session['message'],symptom_hindi=symptom_hindi)
+            flash("Please enter symptoms correctly.")
+            return redirect(url_for('home'))
 
         user_symptoms = [s.strip() for s in symptoms.split(',')]
         valid_symptoms = []
@@ -260,8 +261,8 @@ def home():
 
         # If there are no valid symptoms
         if score < 79:
-            session['message'] = "Please either write symptoms correctly or you have written misspelled symptoms."
-            return render_template('index.html', message=session['message'],symptom_hindi=symptom_hindi)
+            flash("Please either write symptoms correctly or you have written misspelled symptoms.")
+            return redirect(url_for('home'))
 
         # Otherwise, proceed with prediction
         user_symptoms = [symptom.strip("[]' ") for symptom in valid_symptoms]
